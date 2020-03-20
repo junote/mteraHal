@@ -1,0 +1,119 @@
+#ifndef _CCRITSECT_H
+#define _CCRITSECT_H
+
+#include "ss_gdef.h"
+
+#ifdef PSOSP
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    unsigned long splx(unsigned long mask);
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+
+#endif // PSOSP
+
+#ifdef LINUX
+
+// #ifdef __cplusplus
+extern "C" {
+// #endif
+    unsigned long splx(unsigned long mask);
+    void pthreadCritSectEnter(void);
+    void pthreadCritSectExit(void);
+// #ifdef __cplusplus
+}
+// #endif // __cplusplus
+
+#endif // LINUX
+
+#ifdef VXWRKS
+
+#include <vxWorks.h>
+#include <intLib.h>
+
+#ifdef NONE
+#undef NONE
+#endif
+
+#endif // VXWRKS
+
+
+/*
+ *  class used to handle entry/exit
+ *  of critical code sections 
+ */
+class CCritSect
+{
+public:
+    CCritSect() : imask(0), oldMode(0), count(0) {}
+    virtual ~CCritSect() {}
+    virtual void Enter();
+    virtual void Exit();
+
+private:
+    uint32 imask;
+    uint32 oldMode;
+    uint32 count;
+};
+
+class SerialCCritSect : public CCritSect
+{
+    //For future use: Add alternate critical section
+    //implementation for use in I2C drivers.
+};
+
+inline
+void
+CCritSect::Enter()
+{
+    if(count == 0)
+    {
+
+#ifdef PSOSP
+        imask = splx(1);
+#endif // PSOSP
+
+#ifdef LINUX
+	 imask = splx(1);
+         pthreadCritSectEnter();
+#endif // LINUX
+
+#ifdef VXWRKS
+    
+        oldMode = intLock();
+#endif // VXWRKS
+    }
+    //Use reference counting so the same instance of the CCritSect class can
+    //be used multiple times without destroying the contents of the oldMode 
+    //member variable
+    ++count;
+
+
+}
+
+inline
+void
+CCritSect::Exit()
+{
+    --count;
+    if(count == 0)
+    {
+#ifdef PSOSP
+        splx(imask);
+#endif // PSOSP
+
+#ifdef LINUX
+        pthreadCritSectExit();
+	splx(imask);
+#endif // LINUX
+
+#ifdef VXWRKS
+        intUnlock(oldMode);
+#endif // VXWRKS
+    }
+}
+
+#endif
