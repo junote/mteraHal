@@ -27,8 +27,8 @@ set(LIBPTHREAD ${CMAKE_SYSROOT}/lib/libpthread.so.0)
 
 
 # cmake warns if loaded from a min-3.0-required parent dir, so silence the warning:
-cmake_policy(SET CMP0078 NEW)
-cmake_policy(SET CMP0086 NEW)
+#cmake_policy(SET CMP0078 NEW)
+#cmake_policy(SET CMP0086 NEW)
 
 
 

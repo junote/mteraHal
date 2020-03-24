@@ -8,7 +8,7 @@
 #include "I2cDev.h"
 #include "SpiBus.h"
 #include "BcmCli.h"
-
+#include "Pm6010.h"
 %}
 
 %include std_vector.i
@@ -101,3 +101,4 @@
 %include "I2cDev.h"
 %include "SpiBus.h"
 %include "BcmCli.h"
+%include "Pm6010.h"

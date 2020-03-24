@@ -58,16 +58,16 @@ typedef short bbindex_t; /*Used as type for index in container.*/
 /*                                                                     */
 /***********************************************************************/
 
-#if defined(LINUX) || defined(LINUX_SIM)
-typedef unsigned char UINT8;
-typedef unsigned short UINT16;
-typedef unsigned int UINT32;
-typedef int INT32;
-#ifndef INT8
-typedef char INT8;
-#endif
-typedef short INT16;
-#endif
+// #if defined(LINUX) || defined(LINUX_SIM)
+// typedef unsigned char UINT8;
+// typedef unsigned short UINT16;
+// typedef unsigned int UINT32;
+// typedef int INT32;
+// #ifndef INT8
+// typedef char INT8;
+// #endif
+// typedef short INT16;
+// #endif
 
 
 #ifndef __cplusplus
